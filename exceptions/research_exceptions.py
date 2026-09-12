@@ -1,0 +1,2 @@
+class EmptyQuestionError(Exception):
+    pass

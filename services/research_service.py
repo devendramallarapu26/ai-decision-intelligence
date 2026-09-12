@@ -3,4 +3,3 @@ def process_research(question: str) -> dict:
         "question": question,
         "message": "Research processing started"
     }
-    

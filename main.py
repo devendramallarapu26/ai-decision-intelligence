@@ -1,6 +1,8 @@
-from fastapi import FastAPI; 
+from services.research_service import process_research;
+from fastapi import FastAPI,HTTPException; 
 # import fast api
 from pydantic import BaseModel;
+from exceptions.research_exceptions import EmptyQuestionError;
 app = FastAPI() 
 # creating a object for api
 class ResearchRequest(BaseModel): 
@@ -21,7 +23,20 @@ def home():
 def research(req : ResearchRequest): 
     # question is parameter with string datatype retrun dist with question and message.
     # Updated when multiple parameters we cant as in def parameter because we this (req : ResearchRequest) req is a name and ResearchRequest is Basemodel function
-    return{
-        "question" : req.question,
-        "message" : "Research request received"
-    }
+    # return{
+    #     "question" : req.question,
+    #     "message" : "Research request received"
+    # }
+    try:
+        return process_research(req.question)
+    except EmptyQuestionError as error:
+         raise HTTPException(
+                    status_code=400,
+                    detail=str(error)
+                    ) from None
+    # if not req.question.strip(): # this for user and develpoer understand for error
+    #     raise HTTPException(
+    #         status_code=400,
+    #         detail="Question cannot be Empty"
+    #         )
+    # return process_research(req.question)
