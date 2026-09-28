@@ -9,10 +9,32 @@ class ResearchRequest(BaseModel):
     # this onlhy for the request data from the user only
     question : str 
     # its constraint for the quesstion must be in the str
-class ResearchResponse(BaseModel): 
-    # response type checking 
-    question : str
-    message : str
+# class ResearchResponse(BaseModel): 
+#     # response type checking 
+#     question : str
+#     message : str
+#     status : str
+class ResearchResult(BaseModel):
+    summary: str
+    confidence: float
+class Evidence(BaseModel):
+    source: str
+    claim: str
+    relevance: float
+class SubResearchResult(BaseModel):
+    question: str
+    answer: str
+    sources: list[Evidence]
+class ResearchPlan(BaseModel):
+    question: str
+    sub_questions: list[str]
+class ResearchResponse(BaseModel):
+    question: str
+    message: str
+    status: str
+    result: ResearchResult
+    plan: ResearchPlan
+    research: list[SubResearchResult]
 @app.get("/") 
 # with object we using get function from / web
 def home(): 
@@ -40,3 +62,6 @@ def research(req : ResearchRequest):
     #         detail="Question cannot be Empty"
     #         )
     # return process_research(req.question)
+
+    
+
